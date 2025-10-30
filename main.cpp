@@ -13,7 +13,7 @@ int main() {
     vector<int> number_list; 
     vector<string> string_list; 
     int push_number; 
-    string pdfPath = "benford_test.pdf";
+    string pdfPath = "Factsheet.pdf";
     string outputFilePath = "output.txt";
 
     string command = "pdftotext " + pdfPath + " " + outputFilePath;
@@ -35,11 +35,11 @@ int main() {
         while (getline(outputFile, line)) {
             stringstream ss(line);
             while (getline(ss,word,' ')){
-                if (isdigit(word[0]) || isdigit(word[1])){
-                    if (word[0]==0 || word[0] == '-' ){
+                if (isdigit(word[0]) || (isdigit(word[1]) && word[0]=='-')){
+                    if (word[0]=='0' || word[0] == '-' ){
                         index=0; 
                         while (index<word.size() ){
-                            if (word[index]!=0 && word[index]!='.'){
+                            if (word[index]!='0' && word[index]!='.' && word[index]!='-'){
                                 push_number = word[index]-'0'; 
                                 number_list.push_back(push_number);
                                 break; 
@@ -60,7 +60,7 @@ int main() {
 
         // Display the extracted text
         //cout << "Text content extracted from PDF document:" << endl;
-        //benford(number_list);
+        benford(number_list);
         
         //cout << "This is the output witch should not contain any numbers"<< endl;
         /*
