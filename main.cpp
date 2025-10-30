@@ -13,7 +13,7 @@ int main() {
     vector<int> number_list; 
     vector<string> string_list; 
     int push_number; 
-    string pdfPath = "benford_test.pdf";
+    string pdfPath = "Factsheet.pdf";
     string outputFilePath = "output.txt";
 
     string command = "pdftotext " + pdfPath + " " + outputFilePath;
@@ -35,24 +35,20 @@ int main() {
         while (getline(outputFile, line)) {
             stringstream ss(line);
             while (getline(ss,word,' ')){
-                if (isdigit(word[0]) || isdigit(word[1])){
-                    try { 
-                        if (word[0]=0){
-                            index=0; 
-                            while (index<word.size()){
-                                if (word[index]!=0 && word[index]!='.'){
-                                    push_number = word[index]-'0'; 
-                                    number_list.push_back(push_number);  
-                                }
-                                index++; 
-                            }
-                        }else{
-
-                        push_number = stoi(word); 
-                        number_list.push_back(push_number);  
+                if (isdigit(word[0]) || (isdigit(word[1]) && word[0]=='-')){
+                    if (word[0]=='0' || word[0] == '-' ){
+                        index=0; 
+                        while (index<word.size() ){
+                            if (word[index]!='0' && word[index]!='.' && word[index]!='-'){
+                                push_number = word[index]-'0'; 
+                                number_list.push_back(push_number);
+                                break; 
+                            }else{}
+                            index++; 
                         }
-                    }catch (const std::invalid_argument& e){
-                        cout<<"This word is a problem: "<< word<<endl;  
+                    }else{
+                        push_number = word[0]-'0';
+                        number_list.push_back(push_number);  
                     }
                 }else{
                     string_list.push_back(word);  
@@ -63,15 +59,15 @@ int main() {
         outputFile.close();
 
         // Display the extracted text
-        cout << "Text content extracted from PDF document:" << endl;
-        //benford(number_list);
+        //cout << "Text content extracted from PDF document:" << endl;
+        benford(number_list);
         
-        cout << "This is the output witch should not contain any numbers"<< endl;
-        
+        //cout << "This is the output witch should not contain any numbers"<< endl;
+        /*
         int i; 
         for (i=0;i<string_list.size();i++){
             cout << string_list[i] << endl; 
-        }
+        }*/
     } else {
         cout << "Failed to open output file." << endl;
         return 1; // Exit the program with error code
